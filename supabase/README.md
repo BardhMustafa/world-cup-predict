@@ -44,11 +44,41 @@ update public.profiles set is_admin = true where handle = '<your-handle>';
 - **PII stays private** — the Kosovo ID lives in `user_verification`, readable
   only by its owner; `profiles` (world-readable for the leaderboard) never holds it.
 
-## Live scores (optional)
-Deploy the Edge Function and schedule it during matchdays:
+## Featured match (Match of the Day)
+`migrations/0005_featured.sql` adds an `is_featured` flag (max one match) and the
+admin-only `set_featured_match()` RPC. Toggle it from the **Desk** (`/admin`); the
+front page shows the featured fixture, falling back to the next kickoff if none.
+
+## Live scores — auto-results
+`functions/sync-results` polls football-data.org and writes scores into `matches`,
+which fires the scoring trigger. `matches.external_id` is already populated by the
+fixture import, so results map straight back.
+
+`SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are injected into Edge Functions
+automatically — the **only** secret you set is the football token.
+
+**Deploy (CLI):**
 ```bash
-supabase secrets set FOOTBALL_API_KEY=<key>
+supabase secrets set FOOTBALL_API_KEY=516b034dcc464fd089a010d25a90e1e0
 supabase functions deploy sync-results
-# then add a cron schedule in the dashboard (e.g. every 5 min)
 ```
-Populate `matches.external_id` with the provider's match ids so results map back.
+…or in the **Dashboard → Edge Functions**: create `sync-results`, paste the file,
+add the `FOOTBALL_API_KEY` secret, Deploy.
+
+**Test it once** (returns `{ checked, updated, requestsAvailable }`):
+```bash
+curl -X POST https://<ref>.supabase.co/functions/v1/sync-results \
+  -H "Authorization: Bearer <service_role_key>"
+```
+
+**Schedule during matchdays** — Dashboard → Cron, or SQL:
+```sql
+select cron.schedule('sync-results', '* * * * *', $$
+  select net.http_post(
+    url     := 'https://<ref>.supabase.co/functions/v1/sync-results',
+    headers := '{"Authorization":"Bearer <service_role_key>"}'::jsonb
+  );
+$$);
+```
+Every minute is well within the free tier (one provider request per run, and the
+function only writes matches whose score/status actually changed).

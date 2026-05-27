@@ -68,6 +68,7 @@ export default function useHomeData() {
         configured: true,
         loading: false,
         days,
+        upcoming: upcoming.slice(0, 6), // raw rows for stepper cards
         nextKickoff: upcoming[0]?.kickoff ?? null,
         featured,
         leaders: lbRes.data ?? [],
