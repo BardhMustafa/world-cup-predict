@@ -1,0 +1,210 @@
+/* THE PREDICTION POST — application chrome
+   Forms, nav, and page layouts for the data-backed pages.
+   Builds on the tokens + components in newspaper.css.
+   ─────────────────────────────────────────────────── */
+
+/* ── Top nameplate / nav (app pages) ─────────────── */
+.app-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 18px; flex-wrap: wrap;
+  padding: 14px 0;
+  border-bottom: 3px double var(--ink);
+  margin-bottom: 8px;
+}
+.app-nav .brand {
+  font-family: var(--display); font-weight: 900;
+  font-size: 26px; letter-spacing: -0.02em; text-decoration: none; color: var(--ink);
+}
+.app-nav .brand em { font-style: italic; color: var(--burgundy); font-weight: 400; }
+.app-nav .links { display: flex; gap: 22px; flex-wrap: wrap; align-items: center; }
+.app-nav .links a {
+  font-family: var(--label); font-weight: 700; font-style: italic;
+  font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink); text-decoration: none; padding-bottom: 2px;
+}
+.app-nav .links a:hover { color: var(--burgundy); }
+.app-nav .links a.active { border-bottom: 2px solid var(--burgundy); color: var(--burgundy); }
+.app-nav .who { font-family: var(--label); font-style: italic; font-size: 13px; color: var(--ink-soft); }
+
+/* ── Generic page heading ────────────────────────── */
+.page-head { margin: 26px 0 22px; }
+.page-head h1 {
+  font-family: var(--display); font-weight: 900; margin: 0;
+  font-size: clamp(34px, 5vw, 60px); line-height: 0.95; letter-spacing: -0.02em;
+}
+.page-head h1 em { font-style: italic; color: var(--burgundy); }
+.page-head .sub {
+  font-family: var(--label); font-style: italic; font-size: 15px;
+  color: var(--ink-soft); margin-top: 8px;
+}
+
+/* ── Enrolment slip (auth) — retro bookmaker card ── */
+.slip {
+  max-width: 520px; margin: 8px auto 40px;
+  border: 3px double var(--ink); background: var(--paper-light);
+  padding: 30px 30px 26px; position: relative;
+}
+.slip::before, .slip::after {
+  content: ''; position: absolute; width: 20px; height: 20px; border: 1px solid var(--ink);
+}
+.slip::before { top: 9px; left: 9px; border-right: 0; border-bottom: 0; }
+.slip::after  { bottom: 9px; right: 9px; border-left: 0; border-top: 0; }
+.slip-banner {
+  text-align: center; border-bottom: 1px solid var(--ink);
+  padding-bottom: 12px; margin-bottom: 20px;
+}
+.slip-banner .ko {
+  font-family: var(--label); font-style: italic; font-size: 12px;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--burgundy);
+}
+.slip-banner h2 {
+  font-family: var(--display); font-weight: 900; margin: 6px 0 0;
+  font-size: clamp(30px, 5vw, 44px); line-height: 0.95;
+}
+
+/* ── Form fields ─────────────────────────────────── */
+.field { margin-bottom: 16px; }
+.field label {
+  display: block; font-family: var(--label); font-weight: 700;
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ink-soft); margin-bottom: 6px;
+}
+.field input, .field select {
+  width: 100%; box-sizing: border-box;
+  font-family: var(--serif); font-size: 16px; color: var(--ink);
+  background: var(--paper); border: 1px solid var(--ink);
+  padding: 11px 12px; outline: none;
+}
+.field input:focus, .field select:focus { box-shadow: 3px 3px 0 0 var(--gold); }
+.field .hint { font-family: var(--label); font-style: italic; font-size: 12px; color: var(--ink-muted); margin-top: 5px; }
+.field .err { font-family: var(--label); font-style: italic; font-size: 12px; color: var(--burgundy); margin-top: 5px; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.form-note {
+  font-family: var(--label); font-style: italic; font-size: 13px;
+  color: var(--ink-soft); text-align: center; margin-top: 18px;
+}
+.form-note a { color: var(--burgundy); text-decoration: underline; }
+
+.alert {
+  border: 1px solid var(--burgundy); background: rgba(107,31,36,0.06);
+  color: var(--burgundy); padding: 10px 12px; margin-bottom: 16px;
+  font-family: var(--serif); font-size: 14px;
+}
+.alert.ok { border-color: var(--green); background: rgba(31,66,51,0.07); color: var(--green); }
+
+.btn[disabled], .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn.block { width: 100%; justify-content: center; }
+
+/* ── Notice card (Supabase not configured / empty states) ── */
+.notice {
+  border: 1px solid var(--ink); background: var(--paper-light);
+  padding: 22px 24px; margin: 20px 0; max-width: 720px;
+}
+.notice h3 { font-family: var(--display); font-weight: 800; margin: 0 0 8px; font-size: 22px; }
+.notice p { margin: 0 0 8px; font-size: 15px; color: var(--ink-soft); }
+.notice code {
+  font-family: var(--num); font-size: 13px; background: var(--paper-dark);
+  padding: 1px 5px; border: 1px solid var(--edge);
+}
+
+.muted { color: var(--ink-soft); font-family: var(--label); font-style: italic; }
+.center { text-align: center; }
+
+/* ── Prediction state chips ──────────────────────── */
+.chip {
+  font-family: var(--label); font-weight: 700; font-style: italic;
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  border: 1px solid var(--ink); padding: 2px 7px; display: inline-block;
+}
+.chip.open    { color: var(--ink-soft); }
+.chip.saved   { color: var(--green); border-color: var(--green); }
+.chip.locked  { background: var(--ink); color: var(--paper); }
+.chip.live    { background: var(--burgundy); color: var(--paper); border-color: var(--burgundy); }
+.chip.scored  { background: var(--gold); color: var(--ink); border-color: var(--gold-d); }
+
+.pts-pill {
+  font-family: var(--num); font-weight: 600; color: var(--burgundy); font-size: 16px;
+}
+
+/* result line on a finished fixture */
+.final-score {
+  font-family: var(--num); font-weight: 600; font-size: 22px; color: var(--ink);
+}
+
+/* ── Admin table tweaks ──────────────────────────── */
+.admin-grid { width: 100%; border-collapse: collapse; font-family: var(--serif); }
+.admin-grid th {
+  font-family: var(--label); font-weight: 700; font-size: 10px;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft);
+  text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--ink); background: var(--paper-dark);
+}
+.admin-grid td { padding: 10px 8px; border-bottom: 1px solid rgba(26,20,16,0.12); font-size: 14px; vertical-align: middle; }
+.admin-grid input.score {
+  width: 44px; text-align: center; font-family: var(--num); font-weight: 600; font-size: 18px;
+  border: 1px solid var(--ink); background: var(--paper); padding: 4px;
+}
+
+/* ── Predictions page — tighter, roomier fixture list ── */
+.predict-stage { margin-bottom: 40px; }
+.predict-list {
+  max-width: 940px;
+  border-top: 1px solid var(--ink);
+}
+/* short weekday ("Thu.") fits the label column without overflowing */
+.predict-list .fix-day { grid-template-columns: 96px 1fr; }
+.predict-list .fix-day-label { padding: 22px 14px 18px; }
+.predict-list .fix-day-label .day { font-size: 21px; }
+.predict-list .fix-row { padding: 18px 22px; gap: 18px; }
+.predict-list .fix-team { min-width: 0; font-size: 18px; }
+/* let long nation names shrink gracefully rather than overflow */
+.predict-list .fix-team { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+@media (max-width: 640px) {
+  .predict-list .fix-day { grid-template-columns: 64px 1fr; }
+  .predict-list .fix-row { padding: 12px 10px; gap: 10px; }
+  .predict-list .fix-team { font-size: 14px; }
+}
+
+/* ── Group standings tables ──────────────────────── */
+.groups-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 18px 24px; margin-bottom: 36px;
+}
+.group-card { border: 1px solid var(--ink); background: var(--paper-light); }
+.group-card-head {
+  font-family: var(--display); font-weight: 900; font-size: 20px;
+  padding: 8px 12px; border-bottom: 1px solid var(--ink);
+  background: var(--paper-dark); letter-spacing: -0.01em;
+}
+.group-table { width: 100%; border-collapse: collapse; font-family: var(--serif); font-feature-settings: 'tnum' 1; }
+.group-table th {
+  font-family: var(--label); font-weight: 700; font-size: 9px;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft);
+  text-align: right; padding: 7px 6px; border-bottom: 1px solid var(--ink);
+}
+.group-table th.pos, .group-table th.team { text-align: left; }
+.group-table td { padding: 7px 6px; border-bottom: 1px solid rgba(26,20,16,0.12); font-size: 13px; text-align: right; }
+.group-table td.pos { text-align: center; width: 22px; font-family: var(--num); font-weight: 600; color: var(--ink-soft); }
+.group-table td.team { text-align: left; }
+.group-table td.team { display: flex; align-items: center; gap: 8px; font-family: var(--display); font-weight: 700; font-size: 14px; }
+.group-table td.team .crest { width: 22px; height: 22px; }
+.group-table td.pts { font-family: var(--num); font-weight: 600; color: var(--burgundy); }
+.group-table tr.qualify td { background: rgba(31,66,51,0.08); }
+.group-table tr.qualify td.pos { color: var(--green); }
+.group-table tbody tr:last-child td { border-bottom: 0; }
+
+/* ── Stat tiles (profile) ────────────────────────── */
+.stat-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid var(--ink); background: var(--paper-light); }
+.stat-tiles > div { padding: 16px 18px; border-left: 1px solid rgba(26,20,16,0.2); }
+.stat-tiles > div:first-child { border-left: 0; }
+.stat-tiles .v { font-family: var(--num); font-weight: 600; font-size: 30px; color: var(--burgundy); line-height: 1; }
+.stat-tiles .l { font-family: var(--label); font-style: italic; font-size: 11px; color: var(--ink-soft); margin-top: 5px; }
+
+@media (max-width: 640px) {
+  .form-row { grid-template-columns: 1fr; }
+  .stat-tiles { grid-template-columns: 1fr 1fr; }
+  .stat-tiles > div:nth-child(3) { border-left: 0; }
+  .app-nav .links { gap: 14px; }
+}
