@@ -2,15 +2,18 @@ import { NavLink, Link, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import {
   IconHome, IconBall, IconTable, IconGrid, IconUser, IconBell, IconLogout, IconHelp, IconArrow,
+  IconUsers, IconStar,
 } from './ui/icons.jsx';
 
 // Primary navigation (Albanian). `auth` items only show when signed in.
 const navItems = [
-  { to: '/ballina', label: 'Ballina', Icon: IconHome, end: true },
-  { to: '/fixtures', label: 'Parashikimet', Icon: IconBall },
-  { to: '/grupet', label: 'Grupet', Icon: IconGrid },
-  { to: '/renditja', label: 'Renditja', Icon: IconTable },
-  { to: '/profili', label: 'Profili', Icon: IconUser, auth: true },
+  { to: '/ballina',  label: 'Ballina',        Icon: IconHome,  end: true },
+  { to: '/fixtures', label: 'Parashikimet',   Icon: IconBall },
+  { to: '/grupet',   label: 'Grupet',         Icon: IconGrid },
+  { to: '/renditja', label: 'Liga Kryesore',  Icon: IconTable },
+  { to: '/liga',     label: 'Liga Private',   Icon: IconUsers, auth: true },
+  { to: '/mvp',      label: 'Zgjidhni MVP',   Icon: IconStar,  auth: true },
+  { to: '/profili',  label: 'Profili',        Icon: IconUser,  auth: true },
 ];
 
 function activeClass({ isActive }) {

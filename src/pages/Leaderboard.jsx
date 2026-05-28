@@ -35,8 +35,22 @@ export default function Leaderboard() {
   return (
     <>
       <div className="page-head">
-        <h1>Renditja <span className="g">Kombëtare</span></h1>
-        <div className="sub">Renditur sipas pikëve · përditësohet sapo regjistrohet një rezultat.</div>
+        <h1>Liga <span className="g">Kryesore</span></h1>
+        <div className="sub">Renditja publike · shpërblimet shkojnë tek tri parët.</div>
+      </div>
+
+      {/* Prize display */}
+      <div className="prize-banner card pad" style={{ marginBottom: 18 }}>
+        {[
+          { pos: 1, label: '1. Vendi', amount: '150€', cls: 'prize-gold' },
+          { pos: 2, label: '2. Vendi', amount: '100€', cls: 'prize-silver' },
+          { pos: 3, label: '3. Vendi', amount: '50€',  cls: 'prize-bronze' },
+        ].map(({ pos, label, amount, cls }) => (
+          <div key={pos} className={`prize-tier ${cls}`}>
+            <div className="prize-amount">{amount}</div>
+            <div className="prize-label">{label}</div>
+          </div>
+        ))}
       </div>
 
       <div className="card pad">
@@ -52,7 +66,12 @@ export default function Leaderboard() {
                 const you = user && r.user_id === user.id;
                 return (
                   <tr key={r.user_id} className={you ? 'you' : pos <= 3 ? 'top' : ''}>
-                    <td>{String(pos).padStart(2, '0')}</td>
+                    <td>
+                      <div>{String(pos).padStart(2, '0')}</div>
+                      {pos === 1 && <div className="prize-inline">150€</div>}
+                      {pos === 2 && <div className="prize-inline">100€</div>}
+                      {pos === 3 && <div className="prize-inline">50€</div>}
+                    </td>
                     <td>
                       <div className="player">
                         <div className="ini">{r.initials || r.full_name?.slice(0, 2).toUpperCase()}</div>

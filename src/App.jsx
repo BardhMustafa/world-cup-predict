@@ -12,6 +12,9 @@ import Groups from './pages/Groups.jsx';
 import Leaderboard from './pages/Leaderboard.jsx';
 import Profile from './pages/Profile.jsx';
 import Admin from './pages/Admin.jsx';
+import Liga from './pages/Liga.jsx';
+import JoinLeague from './pages/JoinLeague.jsx';
+import MVP from './pages/MVP.jsx';
 
 // `/` is the public marketing homepage for visitors; signed-in users are sent
 // straight to their dashboard at /ballina.
@@ -37,6 +40,9 @@ export default function App() {
             <Route path="/grupet" element={<Groups />} />
             <Route path="/renditja" element={<Leaderboard />} />
             <Route path="/fixtures" element={<ProtectedRoute><Predict /></ProtectedRoute>} />
+            <Route path="/liga" element={<ProtectedRoute><Liga /></ProtectedRoute>} />
+            <Route path="/bashkohu/:code" element={<JoinLeague />} />
+            <Route path="/mvp" element={<ProtectedRoute><MVP /></ProtectedRoute>} />
             <Route path="/profili" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute adminOnly><Admin /></ProtectedRoute>} />
 
