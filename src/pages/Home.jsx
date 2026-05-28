@@ -3,6 +3,7 @@ import useHomeData from '../hooks/useHomeData.js';
 import { useCountdownTo } from '../hooks/useCountdown.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import Crest from '../components/Crest.jsx';
+import PromoCard from '../components/PromoCard.jsx';
 import { IconArrow } from '../components/ui/icons.jsx';
 
 function HeroImages() {
@@ -171,6 +172,8 @@ export default function Home() {
             </div>
           </section>
         )}
+
+        <PromoCard slot="home" />
 
         <section className="home-section" id="si-funksionon">
           <div className="grid-2">

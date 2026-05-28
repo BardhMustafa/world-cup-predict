@@ -623,6 +623,7 @@ select.input { appearance: none; }
 
 /* ── Promo / Sponsored cards ─────────────────────── */
 .promo-card { border-color: rgba(47, 91, 208, 0.3); }
+.home-wrap > .promo-card { margin: 40px 0; }
 .promo-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .promo-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-mute); border: 1px solid var(--border-2); border-radius: var(--r-pill); padding: 2px 8px; }
 .promo-logo { height: 28px; width: auto; object-fit: contain; filter: brightness(0) invert(0.7); }
