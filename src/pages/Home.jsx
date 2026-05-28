@@ -1,8 +1,19 @@
 import { Link } from 'react-router-dom';
 import useHomeData from '../hooks/useHomeData.js';
 import { useCountdownTo } from '../hooks/useCountdown.js';
+import { useAuth } from '../context/AuthContext.jsx';
 import Crest from '../components/Crest.jsx';
 import { IconArrow } from '../components/ui/icons.jsx';
+
+function HeroImages() {
+  return (
+    <div className="hero-backdrop" aria-hidden="true">
+      <img src="/trophy.png" className="hero-img hero-trophy" alt="" draggable="false" />
+      {/* gradient vignette so images fade into the dark bg */}
+      <div className="hero-vignette" />
+    </div>
+  );
+}
 
 const t = (iso) => new Date(iso).toLocaleTimeString('sq', { hour: '2-digit', minute: '2-digit', hour12: false });
 const dlong = (iso) => new Date(iso).toLocaleDateString('sq', { weekday: 'short', day: 'numeric', month: 'short' });
@@ -20,7 +31,7 @@ const steps = [
   ['Ngjitu në renditje', 'Mund kundërshtarët dhe shpallu kampion i Kosovës.'],
 ];
 
-function NextMatchCard({ match, nextKickoff }) {
+function NextMatchCard({ match, nextKickoff, user }) {
   const c = useCountdownTo(nextKickoff);
   if (!match) return null;
   return (
@@ -42,14 +53,43 @@ function NextMatchCard({ match, nextKickoff }) {
       </div>
       <div className="nm-count">{c.d !== '00' ? `${c.d}:` : ''}{c.h}:{c.m}:{c.s}</div>
       <div className="nm-foot">
-        <Link to="/register" className="btn btn-primary block" style={{ marginTop: 16 }}>Parashiko këtë ndeshje</Link>
+        <Link to={user ? '/fixtures' : '/register'} className="btn btn-primary block" style={{ marginTop: 16 }}>Parashiko këtë ndeshje</Link>
       </div>
+    </div>
+  );
+}
+
+function PrizePodium({ user }) {
+  return (
+    <div className="hero-podium">
+      <div className="podium-eyebrow">Çmimi i Kampionatit</div>
+      <div className="podium-headline">
+        <span className="total">300€</span>
+        <span className="sub">në çmime totale · 3 vendet e para</span>
+      </div>
+      <div className="podium-stage">
+        <div className="podium-col p2">
+          <div className="p-amount">100€</div>
+          <div className="p-bar"><span className="p-rank">2</span></div>
+        </div>
+        <div className="podium-col p1">
+          <div className="p-amount">150€</div>
+          <div className="p-bar"><span className="p-rank">1</span></div>
+        </div>
+        <div className="podium-col p3">
+          <div className="p-amount">50€</div>
+          <div className="p-bar"><span className="p-rank">3</span></div>
+        </div>
+      </div>
+      <div className="podium-floor" />
+      <Link to={user ? '/ballina' : '/register'} className="btn btn-primary">Garoj për çmimin <IconArrow size={15} /></Link>
     </div>
   );
 }
 
 export default function Home() {
   const home = useHomeData();
+  const { user } = useAuth();
   const live = home.configured && !home.loading;
   const upcoming = live ? (home.upcoming || []).slice(0, 5) : [];
 
@@ -57,8 +97,8 @@ export default function Home() {
     <div className="home">
       <nav className="home-nav">
         <Link to="/" className="brand">
-          <div className="t">KOSOVA KUP</div>
-          <div className="s">World Cup 2026</div>
+          <div className="t">KUPA E BOTËS</div>
+          <div className="s">2026</div>
         </Link>
         <div className="links">
           <Link to="/fixtures">Ndeshjet</Link>
@@ -67,19 +107,29 @@ export default function Home() {
           <a href="#si-funksionon">Si funksionon</a>
         </div>
         <div className="cta">
-          <Link to="/login" className="btn btn-outline sm">Identifikohu</Link>
-          <Link to="/register" className="btn btn-primary sm">Regjistrohu</Link>
+          {user ? (
+            <Link to="/ballina" className="btn btn-primary sm">Paneli im <IconArrow size={14} /></Link>
+          ) : (
+            <>
+              <Link to="/login" className="btn btn-outline sm">Identifikohu</Link>
+              <Link to="/register" className="btn btn-primary sm">Regjistrohu</Link>
+            </>
+          )}
         </div>
       </nav>
 
-      <div className="home-wrap">
-        <section className="home-hero">
-          <div>
+      {/* Hero is full-width — backdrop bleeds edge to edge */}
+      <section className="home-hero">
+        <HeroImages />
+        <div className="hero-grid">
+          <div style={{ position: 'relative', zIndex: 1 }}>
             <div className="eyebrow">Liga Kombëtare e Parashikimeve</div>
             <h1>Parashiko Kupën e Botës. <span className="g">Bëhu kampion.</span></h1>
             <p>Bashkohu me mijëra tifozë kosovarë. Parashiko çdo ndeshje, fito pikë sipas saktësisë dhe ngjitu në krye të renditjes kombëtare.</p>
             <div className="ctas">
-              <Link to="/register" className="btn btn-primary">Fillo falas <IconArrow size={16} /></Link>
+              <Link to={user ? '/fixtures' : '/register'} className="btn btn-primary">
+                {user ? 'Parashiko tash' : 'Fillo falas'} <IconArrow size={16} />
+              </Link>
               <Link to="/renditja" className="btn btn-outline">Shiko renditjen</Link>
             </div>
             <div className="home-stats">
@@ -88,8 +138,19 @@ export default function Home() {
               <div><div className="v">{live ? (home.counts.patriots ?? 0).toLocaleString('en-US') : '—'}</div><div className="l">Lojtarë</div></div>
             </div>
           </div>
-          <NextMatchCard match={live ? home.featured : null} nextKickoff={live ? home.nextKickoff : null} />
-        </section>
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <PrizePodium user={user} />
+          </div>
+        </div>
+      </section>
+
+      <div className="home-wrap">
+
+        {live && home.featured && (
+          <section className="home-section">
+            <NextMatchCard match={home.featured} nextKickoff={home.nextKickoff} user={user} />
+          </section>
+        )}
 
         {upcoming.length > 0 && (
           <section className="home-section">
@@ -99,7 +160,7 @@ export default function Home() {
             </div>
             <div className="card">
               {upcoming.map((m) => (
-                <Link key={m.id} to="/register" className="fx">
+                <Link key={m.id} to={user ? '/fixtures' : '/register'} className="fx">
                   <span className="t">{t(m.kickoff)}</span>
                   <span className="tm h"><span className="nm">{m.home_team}</span><Crest team={m.home_team} code={m.home_code} /></span>
                   <span className="vs">vs</span>
@@ -137,14 +198,16 @@ export default function Home() {
                   <div className="sr" key={l}><span>{l}</span><span className="pt">{p}</span></div>
                 ))}
               </div>
-              <Link to="/register" className="btn btn-primary block" style={{ marginTop: 18 }}>Krijo llogarinë falas</Link>
+              <Link to={user ? '/fixtures' : '/register'} className="btn btn-primary block" style={{ marginTop: 18 }}>
+                {user ? 'Parashiko tash' : 'Krijo llogarinë falas'}
+              </Link>
             </div>
           </div>
         </section>
 
         <footer className="home-foot">
           <div className="row-between">
-            <span>© 2026 Kosova Kup · Të gjitha të drejtat e rezervuara.</span>
+            <span>© 2026 Kupa e Botës · Të gjitha të drejtat e rezervuara.</span>
             <span style={{ display: 'flex', gap: 18 }}>
               <a href="#">Rregullat</a><a href="#">Privatësia</a><a href="#">Kontakt</a>
             </span>

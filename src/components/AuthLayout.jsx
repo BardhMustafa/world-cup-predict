@@ -3,13 +3,13 @@ export default function AuthLayout({ children }) {
   return (
     <div className="auth">
       <div className="auth-hero">
-        <div className="brandmark">Kosova Kup · MMXXVI</div>
+        <div className="brandmark">Kupa e Botës · MMXXVI</div>
         <h1>
-          <span className="b">KOSOVA</span>
+          <span className="b">KUPA E</span>
           <br />
-          <span className="g">KUP 2026</span>
+          <span className="g">BOTËS 2026</span>
         </h1>
-        <p>Bashkohu me mijëra tifozë. Parashiko ndeshjet, fito pikë dhe shpallu kampion i Kosovës.</p>
+        <p>Bashkohu me mijëra tifozë. Parashiko ndeshjet, fito pikë dhe shpallu kampion.</p>
         <div className="stats">
           <div>
             <div className="v text-green">12K+</div>

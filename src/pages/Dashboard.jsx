@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext.jsx';
 import { supabase } from '../lib/supabase.js';
 import MatchStepperCard from '../components/MatchStepperCard.jsx';
 import Crest from '../components/Crest.jsx';
+import PromoCard from '../components/PromoCard.jsx';
 import { IconArrow } from '../components/ui/icons.jsx';
 
 const t = (iso) => new Date(iso).toLocaleTimeString('sq', { hour: '2-digit', minute: '2-digit', hour12: false });
@@ -121,13 +122,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="card pad" style={{ borderColor: 'rgba(255,215,0,0.28)' }}>
-            <span className="pill pill-gold">Shpërblimi i Javës</span>
-            <h3 style={{ margin: '12px 0 8px', fontSize: 17 }}>Dres origjinal i Kosovës</h3>
-            <p className="text-dim" style={{ fontSize: 14, margin: 0 }}>
-              Parashikuesi me më shumë rezultate të sakta këtë javë e fiton.
-            </p>
-          </div>
+          <PromoCard slot="dashboard" />
         </div>
       </div>
     </>

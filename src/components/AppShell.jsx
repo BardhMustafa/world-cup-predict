@@ -4,6 +4,7 @@ import {
   IconHome, IconBall, IconTable, IconGrid, IconUser, IconBell, IconLogout, IconHelp, IconArrow,
   IconUsers, IconStar,
 } from './ui/icons.jsx';
+import PromoCard from './PromoCard.jsx';
 
 // Primary navigation (Albanian). `auth` items only show when signed in.
 const navItems = [
@@ -38,8 +39,8 @@ export default function AppShell() {
     <div className="shell">
       <aside className="sidebar">
         <Link to="/" className="logo">
-          <div className="t">KOSOVA KUP</div>
-          <div className="s">World Cup Edition</div>
+          <div className="t">KUPA E BOTËS</div>
+          <div className="s">2026</div>
         </Link>
 
         <nav className="nav">
@@ -59,6 +60,8 @@ export default function AppShell() {
           <Link to="/register" className="btn btn-primary block">Regjistrohu <IconArrow size={16} /></Link>
         )}
 
+        <PromoCard slot="sidebar" compact />
+
         <div className="foot">
           <a href="#"><IconHelp size={16} /> Ndihma</a>
           {user
@@ -70,7 +73,7 @@ export default function AppShell() {
       <div className="main">
         <header className="topbar">
           <div className="welcome">
-            {user ? `Mirësevini, ${profile?.full_name?.split(' ')[0] || ''}` : 'Kosova Kup · World Cup 2026'}
+            {user ? `Mirësevini, ${profile?.full_name?.split(' ')[0] || ''}` : 'Kupa e Botës 2026'}
           </div>
           <div className="right">
             <button className="icon-btn" aria-label="Njoftimet"><IconBell size={18} /></button>

@@ -8,6 +8,7 @@ import {
   scorePrediction,
   OUTCOME_LABELS,
 } from '../lib/scoring.js';
+import PromoCard from '../components/PromoCard.jsx';
 
 const stageSq = {
   group: 'Faza e Grupeve',
@@ -79,7 +80,7 @@ function PredictRow({ match, prediction, onSaved }) {
     <div className="pred-row">
       <div className="pred-time">{fmtTime(match.kickoff)}</div>
 
-      <div className="pred-team home">
+      <div className="pred-team pred-home">
         <span className="nm">{match.home_team}</span>
         <Crest team={match.home_team} code={match.home_code} />
       </div>
@@ -200,8 +201,9 @@ export default function Predict() {
           Ende pa ndeshje të publikuara.
         </div>
       ) : (
-        grouped.map((s) => (
+        grouped.map((s, i) => (
           <section key={s.stage} style={{ marginBottom: 30 }}>
+            {i === 1 && <PromoCard slot="predict" />}
             <h2 className="section-title">
               {stageSq[s.stage] || stageLabels[s.stage]}
             </h2>

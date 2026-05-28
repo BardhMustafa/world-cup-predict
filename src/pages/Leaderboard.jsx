@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '../lib/supabase.js';
 import { useAuth } from '../context/AuthContext.jsx';
+import PromoCard from '../components/PromoCard.jsx';
 
 const columns = ['#', 'Përdoruesi', 'L', 'S', 'D', 'G', 'Sak.', '±', 'Pikët'];
 
@@ -52,6 +53,8 @@ export default function Leaderboard() {
           </div>
         ))}
       </div>
+
+      <PromoCard slot="leaderboard" />
 
       <div className="card pad">
         {loading ? (
