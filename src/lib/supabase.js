@@ -10,6 +10,6 @@ export const isSupabaseConfigured = Boolean(url && anonKey);
 
 export const supabase = isSupabaseConfigured
   ? createClient(url, anonKey, {
-      auth: { persistSession: true, autoRefreshToken: true, flowType: 'pkce' },
+      auth: { persistSession: true, autoRefreshToken: true, flowType: 'implicit' },
     })
   : null;
