@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import AuthLayout from '../components/AuthLayout.jsx';
-import { IconUser, IconMail, IconId, IconLock, IconArrow, IconGoogle, IconFacebook } from '../components/ui/icons.jsx';
+import { IconUser, IconMail, IconId, IconLock, IconArrow, IconGoogle } from '../components/ui/icons.jsx';
 import { supabase } from '../lib/supabase.js';
 
 const KOSOVO_ID_RE = /^\d{10}$/;
@@ -116,7 +116,6 @@ export default function Register() {
       <div className="divider-or">Ose vazhdo me</div>
       <div className="social-row">
         <button className="social-btn" onClick={() => oauth('google')}><IconGoogle /> Google</button>
-        <button className="social-btn" onClick={() => oauth('facebook')}><IconFacebook /> Facebook</button>
       </div>
 
       <p className="center" style={{ marginTop: 22, color: 'var(--text-dim)' }}>

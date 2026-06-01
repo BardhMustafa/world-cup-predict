@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import AuthLayout from '../components/AuthLayout.jsx';
-import { IconMail, IconLock, IconArrow, IconGoogle, IconFacebook } from '../components/ui/icons.jsx';
+import { IconMail, IconLock, IconArrow, IconGoogle } from '../components/ui/icons.jsx';
 import { supabase } from '../lib/supabase.js';
 
 export default function Login() {
@@ -61,7 +61,6 @@ export default function Login() {
       <div className="divider-or">Ose vazhdo me</div>
       <div className="social-row">
         <button className="social-btn" onClick={() => oauth('google')}><IconGoogle /> Google</button>
-        <button className="social-btn" onClick={() => oauth('facebook')}><IconFacebook /> Facebook</button>
       </div>
 
       <p className="center" style={{ marginTop: 22, color: 'var(--text-dim)' }}>
