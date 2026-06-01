@@ -2,15 +2,13 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import AuthLayout from '../components/AuthLayout.jsx';
-import { IconUser, IconMail, IconId, IconLock, IconArrow, IconGoogle } from '../components/ui/icons.jsx';
+import { IconUser, IconMail, IconLock, IconArrow, IconGoogle } from '../components/ui/icons.jsx';
 import { supabase } from '../lib/supabase.js';
-
-const KOSOVO_ID_RE = /^\d{10}$/;
 
 export default function Register() {
   const { signUp, isConfigured } = useAuth();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ full_name: '', email: '', kosovo_id: '', password: '' });
+  const [form, setForm] = useState({ full_name: '', email: '', password: '' });
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState('');
   const [done, setDone] = useState(false);
@@ -22,7 +20,6 @@ export default function Register() {
     const e = {};
     if (form.full_name.trim().length < 2) e.full_name = 'Shkruaj emrin tënd.';
     if (!/^\S+@\S+\.\S+$/.test(form.email)) e.email = 'Email i pavlefshëm.';
-    if (!KOSOVO_ID_RE.test(form.kosovo_id)) e.kosovo_id = 'Numri personal ka 10 shifra.';
     if (form.password.length < 8) e.password = 'Të paktën 8 karaktere.';
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -38,12 +35,12 @@ export default function Register() {
     const { data, error } = await signUp({
       email: form.email,
       password: form.password,
-      metadata: { full_name: form.full_name.trim(), kosovo_id: form.kosovo_id.trim(), handle },
+      metadata: { full_name: form.full_name.trim(), handle },
     });
     setBusy(false);
     if (error) {
       setServerError(/duplicate|unique|already/i.test(error.message)
-        ? 'Ky email ose numër personal është regjistruar tashmë.'
+        ? 'Ky email është regjistruar tashmë.'
         : error.message);
       return;
     }
@@ -87,16 +84,6 @@ export default function Register() {
             <input className="input" type="email" value={form.email} onChange={set('email')} placeholder="emri@shembull.com" autoComplete="email" />
           </div>
           {errors.email && <div className="err">{errors.email}</div>}
-        </div>
-
-        <div className="field">
-          <label>Numri Personal (ID)</label>
-          <div className="input-wrap">
-            <span className="ic"><IconId size={18} /></span>
-            <input className="input" inputMode="numeric" maxLength={10} value={form.kosovo_id} onChange={set('kosovo_id')} placeholder="1234567890" />
-          </div>
-          {errors.kosovo_id ? <div className="err">{errors.kosovo_id}</div>
-            : <div className="hint">Përdoret një herë për verifikim. Nuk shfaqet publikisht.</div>}
         </div>
 
         <div className="field">

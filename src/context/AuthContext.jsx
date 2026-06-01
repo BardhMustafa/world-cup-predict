@@ -33,8 +33,8 @@ export function AuthProvider({ children }) {
     return () => sub.subscription.unsubscribe();
   }, [loadProfile]);
 
-  // metadata = { full_name, handle, city, kosovo_id } → consumed by the
-  // handle_new_user trigger to build profile + verification rows.
+  // metadata = { full_name, handle, city } → consumed by the
+  // handle_new_user trigger to build the profile row.
   const signUp = async ({ email, password, metadata }) => {
     const { data, error } = await supabase.auth.signUp({
       email,
