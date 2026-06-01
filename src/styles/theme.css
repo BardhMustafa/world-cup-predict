@@ -148,7 +148,7 @@ select.input { appearance: none; }
 }
 .divider-or::before, .divider-or::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-.social-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.social-row { display: grid; grid-template-columns: 1fr; gap: 12px; }
 .social-btn {
   display: flex; align-items: center; justify-content: center; gap: 10px;
   background: var(--surface-2); border: 1px solid var(--border); color: var(--text);
