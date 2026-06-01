@@ -8,18 +8,33 @@ export default function AuthCallback() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const code = new URLSearchParams(window.location.search).get('code');
+    async function handle() {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code');
+      const errorParam = params.get('error_description') || params.get('error');
 
-    if (!code) {
-      navigate('/', { replace: true });
-      return;
+      if (errorParam) {
+        setError(errorParam);
+        return;
+      }
+
+      if (code) {
+        const { error } = await supabase.auth.exchangeCodeForSession(code);
+        if (error) { setError(error.message); return; }
+        navigate('/ballina', { replace: true });
+        return;
+      }
+
+      // implicit flow — tokens arrive in the hash; Supabase detects them automatically
+      const { data } = await supabase.auth.getSession();
+      if (data.session) {
+        navigate('/ballina', { replace: true });
+      } else {
+        navigate('/login', { replace: true });
+      }
     }
 
-    supabase.auth.exchangeCodeForSession(code)
-      .then(({ error }) => {
-        if (error) setError(error.message);
-        else navigate('/ballina', { replace: true });
-      });
+    handle();
   }, [navigate]);
 
   if (error) {
