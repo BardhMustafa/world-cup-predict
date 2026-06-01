@@ -26,7 +26,7 @@ const scoring = [
   ['Gabim', '0'],
 ];
 const steps = [
-  ['Regjistrohu', 'Krijo llogarinë falas me numrin tënd personal — një hyrje për çdo tifoz.'],
+  ['Regjistrohu', 'Krijo llogarinë tënde falas dhe fillo parashikimet menjëherë.'],
   ['Parashiko', 'Shëno rezultatin për çdo ndeshje para bilbilit të parë.'],
   ['Fito pikë', 'Pikët llogariten automatikisht sapo përfundon ndeshja.'],
   ['Ngjitu në renditje', 'Mund kundërshtarët dhe shpallu kampion i Kosovës.'],
