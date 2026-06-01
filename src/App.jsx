@@ -23,6 +23,7 @@ import Admin from './pages/Admin.jsx';
 import Liga from './pages/Liga.jsx';
 import JoinLeague from './pages/JoinLeague.jsx';
 import MVP from './pages/MVP.jsx';
+import AuthCallback from './pages/AuthCallback.jsx';
 
 function Root() {
   const { loading } = useAuth();
@@ -40,6 +41,7 @@ export default function App() {
           <Route path="/" element={<Root />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
 
           {/* app pages share the sidebar shell */}
           <Route element={<AppShell />}>

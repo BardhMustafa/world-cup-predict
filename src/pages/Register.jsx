@@ -51,7 +51,7 @@ export default function Register() {
     else setDone(true);
   };
 
-  const oauth = (provider) => supabase?.auth.signInWithOAuth({ provider, options: { redirectTo: window.location.origin } });
+  const oauth = (provider) => supabase?.auth.signInWithOAuth({ provider, options: { redirectTo: `${window.location.origin}/auth/callback` } });
 
   if (done) {
     return (

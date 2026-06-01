@@ -27,7 +27,7 @@ export default function Login() {
     else navigate(from, { replace: true });
   };
 
-  const oauth = (provider) => supabase?.auth.signInWithOAuth({ provider, options: { redirectTo: window.location.origin } });
+  const oauth = (provider) => supabase?.auth.signInWithOAuth({ provider, options: { redirectTo: `${window.location.origin}/auth/callback` } });
 
   return (
     <AuthLayout>
