@@ -31,8 +31,9 @@ const fmtTime = (iso) =>
     minute: '2-digit',
     hour12: false,
   });
+const LOCK_MS = 12 * 60 * 60 * 1000;
 const isOpen = (m) =>
-  m.status === 'scheduled' && new Date(m.kickoff) > new Date();
+  m.status === 'scheduled' && new Date(m.kickoff) > new Date(Date.now() + LOCK_MS);
 
 function PredictRow({ match, prediction, onSaved }) {
   const open = isOpen(match);
