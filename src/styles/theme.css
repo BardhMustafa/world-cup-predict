@@ -12,19 +12,19 @@
   --secondary-d:  #00cc6a;
   --tertiary:     #ffd700;   /* prizes, points */
 
-  /* Surfaces (built on neutral #0F172A) */
-  --bg:        #0a0f1c;
-  --bg-grad-1: #0d1426;
-  --surface:   #131c30;
-  --surface-2: #1a2540;
-  --surface-3: #223054;
-  --border:    rgba(148, 163, 184, 0.14);
-  --border-2:  rgba(148, 163, 184, 0.24);
+  /* Surfaces — warm dark slate */
+  --bg:        #1c1928;
+  --bg-grad-1: #231f32;
+  --surface:   #2b2840;
+  --surface-2: #35314e;
+  --surface-3: #403c5c;
+  --border:    rgba(180, 170, 210, 0.16);
+  --border-2:  rgba(180, 170, 210, 0.28);
 
   /* Text */
-  --text:     #e8edf6;
-  --text-dim: #9aa8c0;
-  --text-mute:#647089;
+  --text:     #ede9f6;
+  --text-dim: #aa9fc2;
+  --text-mute:#726898;
 
   /* State */
   --good: #00ff85;
