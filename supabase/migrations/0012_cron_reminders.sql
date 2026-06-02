@@ -9,7 +9,7 @@ select cron.schedule(
   '0 8 * * *',
   $$
   select net.http_post(
-    url     := 'https://<PROJECT_REF>.supabase.co/functions/v1/send-reminders',
+    url     := 'https://zckaffozjuktotof.supabase.co/functions/v1/send-reminders',
     headers := jsonb_build_object(
       'Content-Type',  'application/json',
       'Authorization', 'Bearer <ANON_KEY>'
