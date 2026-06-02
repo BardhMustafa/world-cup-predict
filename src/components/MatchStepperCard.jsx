@@ -8,7 +8,11 @@ import { scorePrediction, OUTCOME_LABELS } from '../lib/scoring.js';
 
 const clamp = (n) => Math.max(0, Math.min(20, n));
 const LOCK_MS = 12 * 60 * 60 * 1000;
-const isOpen = (m) => m.status === 'scheduled' && new Date(m.kickoff) > new Date(Date.now() + LOCK_MS);
+const isOpen = (m) => {
+  const now = Date.now();
+  const kickoff = new Date(m.kickoff).getTime();
+  return m.status === 'scheduled' && now >= kickoff - LOCK_MS && now < kickoff;
+};
 const fmt = (iso) => new Date(iso).toLocaleString('sq', { weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false });
 
 function Stepper({ value, setValue, disabled }) {
