@@ -12,7 +12,7 @@ select cron.schedule(
     url     := 'https://zckaffozjuktotof.supabase.co/functions/v1/send-reminders',
     headers := jsonb_build_object(
       'Content-Type',  'application/json',
-      'Authorization', 'Bearer <ANON_KEY>'
+      'Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpja2FmZm96anVrdG90b2Z2ZHRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4ODc2MjYsImV4cCI6MjA5NTQ2MzYyNn0.nLOHMhBhzGN8Zc8gS6JJE8IyMCqtUv2uaVVXJjTCylU'
     ),
     body    := '{}'::jsonb
   );
