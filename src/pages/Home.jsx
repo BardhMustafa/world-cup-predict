@@ -225,10 +225,9 @@ export default function Home() {
   const fallbackLeaders = sampleLeaders.slice(0, 5).map((r) => ({
     name: r.name, initials: r.initials, city: r.city, points: r.points, acc: r.accuracy, you: r.tier === 'you',
   }));
-  // Only surface the real table once a match has actually been scored —
-  // before kickoff everyone sits on 0 pts / — accuracy, which reads as broken.
-  const hasRealRace = realLeaders.some((r) => r.points !== '0' && r.acc !== '—');
-  const standings = live && hasRealRace ? realLeaders : fallbackLeaders;
+  // Real leaderboard whenever the DB has players; the editorial sample only
+  // stands in for a preview deploy with no Supabase wired up.
+  const standings = live && realLeaders.length ? realLeaders : fallbackLeaders;
 
   return (
     <div className="home">
