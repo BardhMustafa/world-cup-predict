@@ -23,6 +23,9 @@ export const IconChart = (p) => <S {...p}><path d="M4 20V10M10 20V4M16 20v-7M22 
 export const IconCheck = (p) => <S {...p}><path d="m5 13 4 4 10-11" /></S>;
 export const IconLockSmall = (p) => <S {...p}><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></S>;
 
+export const IconMenu  = (p) => <S {...p}><path d="M4 6h16M4 12h16M4 18h16" /></S>;
+export const IconClose = (p) => <S {...p}><path d="M6 6l12 12M18 6 6 18" /></S>;
+
 export const IconStar    = (p) => <S {...p}><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" /></S>;
 export const IconUsers   = (p) => <S {...p}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></S>;
 export const IconCopy    = (p) => <S {...p}><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></S>;
