@@ -4,6 +4,7 @@ import { useCountdownTo } from '../hooks/useCountdown.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import Crest from '../components/Crest.jsx';
 import PromoCard from '../components/PromoCard.jsx';
+import { leaderboard as sampleLeaders } from '../data/leaderboard.js';
 import { IconArrow } from '../components/ui/icons.jsx';
 
 function HeroImages() {
@@ -19,18 +20,18 @@ function HeroImages() {
 const t = (iso) => new Date(iso).toLocaleTimeString('sq', { hour: '2-digit', minute: '2-digit', hour12: false });
 const dlong = (iso) => new Date(iso).toLocaleDateString('sq', { weekday: 'short', day: 'numeric', month: 'short' });
 
-const scoring = [
-  ['Rezultat i saktë', '+10'],
-  ['Fitues + diferencë golash', '+5'],
-  ['Fitues i saktë', '+3'],
-  ['Gabim', '0'],
-];
-const steps = [
-  ['Regjistrohu', 'Krijo llogarinë tënde falas dhe fillo parashikimet menjëherë.'],
-  ['Parashiko', 'Shëno rezultatin për çdo ndeshje para bilbilit të parë.'],
-  ['Fito pikë', 'Pikët llogariten automatikisht sapo përfundon ndeshja.'],
-  ['Ngjitu në renditje', 'Mund kundërshtarët dhe shpallu kampion i Kosovës.'],
-];
+// One marquee tie, scored four ways. Beats a generic numbered "how it works".
+const SCORE_EXAMPLE = {
+  home: 'Argjentina', home_code: 'ARG',
+  away: 'Brazili', away_code: 'BRA',
+  finalH: 2, finalA: 1,
+  ways: [
+    { pred: '2–1', label: 'Rezultat i saktë', pts: '+10', tone: 'exact' },
+    { pred: '3–2', label: 'Fitues + diferenca e golave', pts: '+5', tone: 'diff' },
+    { pred: '1–0', label: 'Vetëm fituesin e gjete', pts: '+3', tone: 'win' },
+    { pred: '0–2', label: 'Krejt anash', pts: '0', tone: 'miss' },
+  ],
+};
 
 function NextMatchCard({ match, nextKickoff, user }) {
   const c = useCountdownTo(nextKickoff);
@@ -88,11 +89,146 @@ function PrizePodium({ user }) {
   );
 }
 
+// Section label: a hand-set index + kicker, reused across the page so each
+// band reads as a chapter rather than another identical stripe.
+function Kicker({ n, children }) {
+  return (
+    <div className="hx-kicker">
+      <span className="hx-num">{n}</span>
+      <span className="hx-eyebrow">{children}</span>
+    </div>
+  );
+}
+
+function Matchroom({ home, upcoming, user }) {
+  return (
+    <section className="hx-band hx-matchroom" id="matchroom">
+      <Kicker n="01">Tabela e ndeshjeve</Kicker>
+      <div className="hx-mr-head">
+        <h2>Ndeshja e radhës nuk pret askënd.</h2>
+        <p>Dritarja për të parashikuar hapet 12 orë para bilbilit dhe mbyllet me të. Vendos rezultatin, e harro — pikët vijnë vetë.</p>
+      </div>
+      <div className="hx-mr-grid">
+        <NextMatchCard match={home.featured} nextKickoff={home.nextKickoff} user={user} />
+        <div className="hx-fixtures card">
+          <div className="hx-fx-head">
+            <span>Pas saj</span>
+            <Link to="/fixtures" className="link-green">Kalendari i plotë →</Link>
+          </div>
+          {upcoming.map((m) => (
+            <Link key={m.id} to={user ? '/fixtures' : '/register'} className="hx-fx">
+              <span className="hx-fx-day">{dlong(m.kickoff)}</span>
+              <span className="hx-fx-time">{t(m.kickoff)}</span>
+              <span className="hx-fx-tie">
+                <Crest team={m.home_team} code={m.home_code} size={22} round />
+                <b>{m.home_code || m.home_team}</b>
+                <i>v</i>
+                <b>{m.away_code || m.away_team}</b>
+                <Crest team={m.away_team} code={m.away_code} size={22} round />
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Scoring({ user }) {
+  const ex = SCORE_EXAMPLE;
+  return (
+    <section className="hx-band hx-scoring-band" id="si-funksionon">
+      <Kicker n="02">Si shënohen pikët</Kicker>
+      <div className="hx-scoring">
+        <div className="hx-sc-grid">
+        <div className="hx-sc-intro">
+          <h2>Një ndeshje.<br />Katër mënyra për të shënuar.</h2>
+          <p>Sa më afër rezultatit të vërtetë, aq më shumë pikë. Ja se si do të dukej një parashikim i vetëm kundër këtij rezultati final.</p>
+          <div className="hx-sc-mult">
+            <span className="pill pill-mute">Faza me eliminim ×2</span>
+            <span className="pill pill-gold">Finalja ×3</span>
+          </div>
+          <Link to={user ? '/fixtures' : '/register'} className="btn btn-primary">
+            {user ? 'Parashiko tash' : 'Hap llogarinë falas'} <IconArrow size={16} />
+          </Link>
+        </div>
+
+        <div className="hx-sc-board card">
+          <div className="hx-final">
+            <span className="hx-final-tag">Rezultati final</span>
+            <div className="hx-final-row">
+              <span className="hx-final-team"><Crest team={ex.home} code={ex.home_code} size={28} round /> {ex.home}</span>
+              <span className="hx-final-score">{ex.finalH}<i>–</i>{ex.finalA}</span>
+              <span className="hx-final-team r">{ex.away} <Crest team={ex.away} code={ex.away_code} size={28} round /></span>
+            </div>
+          </div>
+          <div className="hx-ways">
+            {ex.ways.map((w) => (
+              <div className={`hx-way hx-way-${w.tone}`} key={w.pred}>
+                <span className="hx-way-pred">{w.pred}</span>
+                <span className="hx-way-label">{w.label}</span>
+                <span className="hx-way-pts">{w.pts}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Standings({ rows, user, live }) {
+  return (
+    <section className="hx-band hx-standings">
+      <Kicker n="03">Renditja kombëtare</Kicker>
+      <div className="hx-st-head">
+        <h2>Kush po kryeson</h2>
+        <Link to="/renditja" className="link-green">Tabela e plotë →</Link>
+      </div>
+      <div className="hx-st-list card">
+        {rows.map((r, i) => (
+          <div className={`hx-st-row${r.you ? ' me' : ''}`} key={r.name + i}>
+            <span className="hx-st-pos">{String(i + 1).padStart(2, '0')}</span>
+            <span className="hx-st-ini">{r.initials}</span>
+            <span className="hx-st-name">
+              {r.name}
+              {r.city && <em>{r.city}</em>}
+            </span>
+            <span className="hx-st-acc">{r.acc}<i>saktësi</i></span>
+            <span className="hx-st-pts">{r.points}</span>
+          </div>
+        ))}
+        <Link to={user ? '/renditja' : '/register'} className="hx-st-cta">
+          {live ? 'Hyr në garë dhe zër vendin tënd' : 'Bëhu pjesë e renditjes'} <IconArrow size={15} />
+        </Link>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   const home = useHomeData();
   const { user } = useAuth();
   const live = home.configured && !home.loading;
   const upcoming = live ? (home.upcoming || []).slice(0, 5) : [];
+
+  // Real leaders when the DB is wired; otherwise the editorial sample so the
+  // page never looks empty in a fresh/preview deploy.
+  const realLeaders = (home.leaders || []).slice(0, 5).map((r) => ({
+    name: r.full_name,
+    initials: r.initials || r.full_name?.slice(0, 2).toUpperCase(),
+    points: Number(String(r.points).replace(/,/g, '') || 0).toLocaleString('en-US'),
+    acc: r.played ? `${Math.round((100 * ((r.exact_count || 0) + (r.correct_count || 0))) / r.played)}%` : '—',
+    you: false,
+  }));
+  const fallbackLeaders = sampleLeaders.slice(0, 5).map((r) => ({
+    name: r.name, initials: r.initials, city: r.city, points: r.points, acc: r.accuracy, you: r.tier === 'you',
+  }));
+  // Only surface the real table once a match has actually been scored —
+  // before kickoff everyone sits on 0 pts / — accuracy, which reads as broken.
+  const hasRealRace = realLeaders.some((r) => r.points !== '0' && r.acc !== '—');
+  const standings = live && hasRealRace ? realLeaders : fallbackLeaders;
 
   return (
     <div className="home">
@@ -146,73 +282,44 @@ export default function Home() {
       </section>
 
       <div className="home-wrap">
-
         {live && home.featured && (
-          <section className="home-section">
-            <NextMatchCard match={home.featured} nextKickoff={home.nextKickoff} user={user} />
-          </section>
+          <Matchroom home={home} upcoming={upcoming} user={user} />
         )}
 
-        {upcoming.length > 0 && (
-          <section className="home-section">
-            <div className="row-between">
-              <h2>Ndeshjet e Radhës</h2>
-              <Link to="/fixtures" className="link-green">Të gjitha →</Link>
-            </div>
-            <div className="card">
-              {upcoming.map((m) => (
-                <Link key={m.id} to={user ? '/fixtures' : '/register'} className="fx">
-                  <span className="t">{t(m.kickoff)}</span>
-                  <span className="tm h"><span className="nm">{m.home_team}</span><Crest team={m.home_team} code={m.home_code} /></span>
-                  <span className="vs">vs</span>
-                  <span className="tm"><Crest team={m.away_team} code={m.away_code} /><span className="nm">{m.away_team}</span></span>
-                  <span className="chev"><IconArrow size={14} /></span>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )}
+        <Scoring user={user} />
 
         <PromoCard slot="home" />
 
-        <section className="home-section" id="si-funksionon">
-          <div className="grid-2">
-            <div>
-              <h2>Si funksionon</h2>
-              <p className="text-dim" style={{ margin: '8px 0 20px', maxWidth: 460 }}>
-                Pa bastore, pa para — vetëm njohuria jote për futbollin kundër të gjithë Kosovës.
-              </p>
-              <div className="steps">
-                {steps.map(([b, p], i) => (
-                  <div className="st" key={b}>
-                    <div className="n">{i + 1}</div>
-                    <div className="tx"><b>{b}</b><p>{p}</p></div>
-                  </div>
-                ))}
-              </div>
+        <Standings rows={standings} user={user} live={live} />
+
+        <footer className="hx-foot">
+          <div className="hx-foot-top">
+            <div className="hx-foot-brand">
+              <div className="t">KUPA E BOTËS <span>2026</span></div>
+              <p>Liga kombëtare e parashikimeve. S'ka bastore, s'ka para në mes — vetëm ti kundër gjithë Kosovës.</p>
             </div>
-            <div className="card pad">
-              <div className="row-between" style={{ marginBottom: 6 }}>
-                <h3 style={{ fontSize: 16 }}>Si fitohen pikët</h3>
-                <span className="pill pill-mute">Eliminimet ×2 · Finalja ×3</span>
+            <div className="hx-foot-cols">
+              <div>
+                <span className="h">Loja</span>
+                <Link to="/fixtures">Ndeshjet</Link>
+                <Link to="/grupet">Grupet</Link>
+                <Link to="/renditja">Renditja</Link>
+                <Link to="/mvp">MVP</Link>
               </div>
-              <div className="scoring-list">
-                {scoring.map(([l, p]) => (
-                  <div className="sr" key={l}><span>{l}</span><span className="pt">{p}</span></div>
-                ))}
+              <div>
+                <span className="h">Llogaria</span>
+                <Link to="/register">Regjistrohu</Link>
+                <Link to="/login">Identifikohu</Link>
+                <Link to="/liga">Liga private</Link>
               </div>
-              <Link to={user ? '/fixtures' : '/register'} className="btn btn-primary block" style={{ marginTop: 18 }}>
-                {user ? 'Parashiko tash' : 'Krijo llogarinë falas'}
-              </Link>
             </div>
           </div>
-        </section>
-
-        <footer className="home-foot">
-          <div className="row-between">
-            <span>© 2026 Kupa e Botës · Të gjitha të drejtat e rezervuara.</span>
-            <span style={{ display: 'flex', gap: 18 }}>
-              <a href="#">Rregullat</a><a href="#">Privatësia</a><a href="#">Kontakt</a>
+          <div className="hx-foot-bot">
+            <span>© 2026 Kupa e Botës · Ndërtuar në Prishtinë.</span>
+            <span className="hx-foot-legal">
+              <a href="#si-funksionon">Rregullat</a>
+              <a href="#si-funksionon">Privatësia</a>
+              <a href="#matchroom">Kontakt</a>
             </span>
           </div>
         </footer>
