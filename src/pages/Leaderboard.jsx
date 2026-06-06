@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import PromoCard from '../components/PromoCard.jsx';
 import PlayerPredictions from '../components/PlayerPredictions.jsx';
+import useActivePlayers from '../hooks/useActivePlayers.js';
 
 const columns = ['#', 'Përdoruesi', 'L', 'S', 'D', 'G', 'Sak.', '±', 'Pikët'];
 
@@ -17,6 +18,7 @@ export default function Leaderboard() {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(null);
+  const { players, active, remaining, min } = useActivePlayers();
 
   const load = useCallback(async () => {
     const { data } = await supabase.from('leaderboard').select('*')
@@ -55,6 +57,13 @@ export default function Leaderboard() {
           </div>
         ))}
       </div>
+
+      {players != null && !active && (
+        <div className="prize-pending">
+          🔒 Çmimet aktivizohen kur <b>{min} lojtarë</b> të kenë parashikuar — edhe {remaining}
+          {' '}({players}/{min}). Loja vazhdon normalisht.
+        </div>
+      )}
 
       <PromoCard slot="leaderboard" />
 

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import useHomeData from '../hooks/useHomeData.js';
+import useActivePlayers from '../hooks/useActivePlayers.js';
 import { useCountdownTo } from '../hooks/useCountdown.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import Crest from '../components/Crest.jsx';
@@ -61,8 +62,10 @@ function NextMatchCard({ match, nextKickoff, user }) {
 }
 
 function PrizePodium({ user }) {
+  const { players, active, remaining, min } = useActivePlayers();
+  const pct = players == null ? 0 : Math.min(100, Math.round((players / min) * 100));
   return (
-    <div className="hero-podium">
+    <div className={`hero-podium${players != null && !active ? ' is-pending' : ''}`}>
       <div className="podium-eyebrow">Çmimi i Kampionatit</div>
       <div className="podium-headline">
         <span className="total">300€</span>
@@ -83,7 +86,21 @@ function PrizePodium({ user }) {
         </div>
       </div>
       <div className="podium-floor" />
-      <Link to={user ? '/ballina' : '/register'} className="btn btn-primary">Garoj për çmimin <IconArrow size={15} /></Link>
+
+      {players != null && (active ? (
+        <div className="podium-status"><span className="ps-pill on">✓ Çmimet janë aktive</span></div>
+      ) : (
+        <div className="podium-status">
+          <div className="ps-bar"><span style={{ width: `${pct}%` }} /></div>
+          <div className="ps-text">
+            <b>{players}/{min}</b> lojtarë — edhe {remaining} që çmimet të aktivizohen
+          </div>
+        </div>
+      ))}
+
+      <Link to={user ? '/ballina' : '/register'} className="btn btn-primary">
+        {active ? 'Garoj për çmimin' : 'Bëhu pjesë e garës'} <IconArrow size={15} />
+      </Link>
     </div>
   );
 }
