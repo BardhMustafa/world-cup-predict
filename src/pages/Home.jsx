@@ -4,7 +4,6 @@ import { useCountdownTo } from '../hooks/useCountdown.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import Crest from '../components/Crest.jsx';
 import PromoCard from '../components/PromoCard.jsx';
-import { leaderboard as sampleLeaders } from '../data/leaderboard.js';
 import { IconArrow } from '../components/ui/icons.jsx';
 
 function HeroImages() {
@@ -178,7 +177,7 @@ function Scoring({ user }) {
   );
 }
 
-function Standings({ rows, user, live }) {
+function Standings({ rows, user }) {
   return (
     <section className="hx-band hx-standings">
       <Kicker n="03">Renditja kombëtare</Kicker>
@@ -187,21 +186,32 @@ function Standings({ rows, user, live }) {
         <Link to="/renditja" className="link-green">Tabela e plotë →</Link>
       </div>
       <div className="hx-st-list card">
-        {rows.map((r, i) => (
-          <div className={`hx-st-row${r.you ? ' me' : ''}`} key={r.name + i}>
-            <span className="hx-st-pos">{String(i + 1).padStart(2, '0')}</span>
-            <span className="hx-st-ini">{r.initials}</span>
-            <span className="hx-st-name">
-              {r.name}
-              {r.city && <em>{r.city}</em>}
-            </span>
-            <span className="hx-st-acc">{r.acc}<i>saktësi</i></span>
-            <span className="hx-st-pts">{r.points}</span>
+        {rows.length === 0 ? (
+          <div className="hx-st-empty">
+            <p>Renditja është ende bosh — askush s'ka hyrë në garë.</p>
+            <Link to={user ? '/fixtures' : '/register'} className="btn btn-primary">
+              Bëhu i pari në krye <IconArrow size={15} />
+            </Link>
           </div>
-        ))}
-        <Link to={user ? '/renditja' : '/register'} className="hx-st-cta">
-          {live ? 'Hyr në garë dhe zër vendin tënd' : 'Bëhu pjesë e renditjes'} <IconArrow size={15} />
-        </Link>
+        ) : (
+          <>
+            {rows.map((r, i) => (
+              <div className={`hx-st-row${r.you ? ' me' : ''}`} key={r.name + i}>
+                <span className="hx-st-pos">{String(i + 1).padStart(2, '0')}</span>
+                <span className="hx-st-ini">{r.initials}</span>
+                <span className="hx-st-name">
+                  {r.name}
+                  {r.city && <em>{r.city}</em>}
+                </span>
+                <span className="hx-st-acc">{r.acc}<i>saktësi</i></span>
+                <span className="hx-st-pts">{r.points}</span>
+              </div>
+            ))}
+            <Link to={user ? '/renditja' : '/register'} className="hx-st-cta">
+              Hyr në garë dhe zër vendin tënd <IconArrow size={15} />
+            </Link>
+          </>
+        )}
       </div>
     </section>
   );
@@ -213,22 +223,15 @@ export default function Home() {
   const live = home.configured && !home.loading;
   const upcoming = live ? (home.upcoming || []).slice(0, 5) : [];
 
-  // Real leaders when the DB is wired; otherwise the editorial sample so the
-  // page never looks empty in a fresh/preview deploy.
-  const realLeaders = (home.leaders || []).slice(0, 5).map((r) => ({
+  // Real leaders only — no editorial sample. Empty until people sign up.
+  const standings = (home.leaders || []).slice(0, 5).map((r) => ({
     name: r.full_name,
     initials: r.initials || r.full_name?.slice(0, 2).toUpperCase(),
     points: Number(String(r.points).replace(/,/g, '') || 0).toLocaleString('en-US'),
     acc: r.played ? `${Math.round((100 * ((r.exact_count || 0) + (r.correct_count || 0))) / r.played)}%` : '—',
     you: false,
   }));
-  const fallbackLeaders = sampleLeaders.slice(0, 5).map((r) => ({
-    name: r.name, initials: r.initials, city: r.city, points: r.points, acc: r.accuracy, you: r.tier === 'you',
-  }));
   // Real leaderboard whenever the DB has players; the editorial sample only
-  // stands in for a preview deploy with no Supabase wired up.
-  const standings = live && realLeaders.length ? realLeaders : fallbackLeaders;
-
   return (
     <div className="home">
       <nav className="home-nav">
@@ -289,7 +292,7 @@ export default function Home() {
 
         <PromoCard slot="home" />
 
-        <Standings rows={standings} user={user} live={live} />
+        <Standings rows={standings} user={user} />
 
         <footer className="hx-foot">
           <div className="hx-foot-top">
