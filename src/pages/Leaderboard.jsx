@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '../lib/supabase.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import PromoCard from '../components/PromoCard.jsx';
+import PlayerPredictions from '../components/PlayerPredictions.jsx';
 
 const columns = ['#', 'Përdoruesi', 'L', 'S', 'D', 'G', 'Sak.', '±', 'Pikët'];
 
@@ -15,6 +16,7 @@ export default function Leaderboard() {
   const { user, isConfigured } = useAuth();
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState(null);
 
   const load = useCallback(async () => {
     const { data } = await supabase.from('leaderboard').select('*')
@@ -37,7 +39,7 @@ export default function Leaderboard() {
     <>
       <div className="page-head">
         <h1>Liga <span className="g">Kryesore</span></h1>
-        <div className="sub">Renditja publike · shpërblimet shkojnë tek tri parët.</div>
+        <div className="sub">Renditja publike · kliko një lojtar për të parë parashikimet e zbuluara.</div>
       </div>
 
       {/* Prize display */}
@@ -68,7 +70,12 @@ export default function Leaderboard() {
                 const acc = r.played ? Math.round((100 * (r.exact_count + r.correct_count)) / r.played) : 0;
                 const you = user && r.user_id === user.id;
                 return (
-                  <tr key={r.user_id} className={you ? 'you' : pos <= 3 ? 'top' : ''}>
+                  <tr
+                    key={r.user_id}
+                    className={`lb-row ${you ? 'you' : pos <= 3 ? 'top' : ''}`}
+                    onClick={() => setSelected(r)}
+                    title="Shiko parashikimet"
+                  >
                     <td>
                       <div>{String(pos).padStart(2, '0')}</div>
                       {pos === 1 && <div className="prize-inline">150€</div>}
@@ -105,6 +112,8 @@ export default function Leaderboard() {
       <p className="text-mute" style={{ fontSize: 12, marginTop: 12 }}>
         L · luajtura &nbsp; S · sakte &nbsp; D · drejt &nbsp; G · gabim &nbsp; Sak. · saktësia
       </p>
+
+      {selected && <PlayerPredictions player={selected} onClose={() => setSelected(null)} />}
     </>
   );
 }
